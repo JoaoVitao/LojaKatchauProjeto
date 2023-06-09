@@ -2,12 +2,10 @@ package GUI;
 
 import Entities.CarrinhoDeCompras;
 import Entities.Produto;
+import Util.ArquivoUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class KatchauGUI extends JFrame {
@@ -15,6 +13,8 @@ public class KatchauGUI extends JFrame {
     private CarrinhoDeCompras carrinho;
     private JTextArea textAreaDescricao;
     private JComboBox<String> comboBoxFiltro;
+
+    private static final String NOME_ARQUIVO = "dados.produtos";
 
     public KatchauGUI() {
         carrinho = new CarrinhoDeCompras();
@@ -32,7 +32,17 @@ public class KatchauGUI extends JFrame {
         JButton btnCalcularTotal = new JButton("Finalizar compra");
         textAreaDescricao = new JTextArea();
         textAreaDescricao.setEditable(false);
+
+        // Inicialização do JComboBox
         comboBoxFiltro = new JComboBox<>();
+        comboBoxFiltro.addItem("Todos");
+        comboBoxFiltro.addItem("Smartphone");
+        comboBoxFiltro.addItem("TV");
+        comboBoxFiltro.addItem("Desktop");
+        comboBoxFiltro.addItem("Tablet");
+        comboBoxFiltro.addItem("Console");
+        comboBoxFiltro.addItem("Headset");
+        comboBoxFiltro.addItem("Notebook");
 
         // Painéis
         JPanel painelSuperior = new JPanel(new BorderLayout());
@@ -50,7 +60,9 @@ public class KatchauGUI extends JFrame {
         add(textAreaDescricao, BorderLayout.CENTER);
         add(painelInferior, BorderLayout.SOUTH);
 
-        // Ação do botão Adicionar Produto
+
+
+    // Ação do botão Adicionar Produto
         btnAdicionar.addActionListener(e -> adicionarProduto());
 
         // Ação do botão Remover Produto
@@ -64,6 +76,16 @@ public class KatchauGUI extends JFrame {
 
         // Ação da seleção no JComboBox de filtro
         comboBoxFiltro.addActionListener(e -> aplicarFiltro());
+
+        // Carregar os dados ao iniciar a aplicação
+        List<Produto> listaProdutos = ArquivoUtils.carregarDados(NOME_ARQUIVO);
+        if (listaProdutos != null) {
+            DefaultListModel<Produto> model = new DefaultListModel<>();
+            for (Produto produto : listaProdutos) {
+                model.addElement(produto);
+            }
+            listProdutos.setModel(model);
+        }
     }
 
     private void adicionarProduto() {
@@ -71,6 +93,9 @@ public class KatchauGUI extends JFrame {
         if (produtoSelecionado != null) {
             carrinho.adicionarProduto(produtoSelecionado);
             JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
+
+            // Salvar os dados após adicionar o produto
+            ArquivoUtils.salvarDados(carrinho.getProdutos(), NOME_ARQUIVO);
         }
     }
 
@@ -79,6 +104,9 @@ public class KatchauGUI extends JFrame {
         if (produtoSelecionado != null) {
             carrinho.removerProduto(produtoSelecionado);
             JOptionPane.showMessageDialog(this, "Produto removido do carrinho!");
+
+            // Salvar os dados após remover o produto
+            ArquivoUtils.salvarDados(carrinho.getProdutos(), NOME_ARQUIVO);
         }
     }
 
@@ -149,3 +177,4 @@ public class KatchauGUI extends JFrame {
         });
     }
 }
+

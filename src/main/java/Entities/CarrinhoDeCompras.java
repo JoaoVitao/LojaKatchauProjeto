@@ -4,37 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarrinhoDeCompras {
-    private static List<ItemCarrinho> itens;
+    private List<Produto> produtos;
 
     public CarrinhoDeCompras() {
-        itens = new ArrayList<>();
+        produtos = new ArrayList<>();
     }
 
-    public static void adicionarProduto(ItemCarrinho item) {
-        itens.add(item);
+    public void adicionarProduto(Produto produto) {
+        produtos.add(produto);
     }
 
-    public void removerProduto(Produto item) {
-        itens.remove(item);
+    public void removerProduto(Produto produto) {
+        produtos.remove(produto);
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
     }
 
     public double calcularValorTotal() {
         double valorTotal = 0.0;
-        for (ItemCarrinho item : itens) {
-            valorTotal += item.getPreco();
+        for (Produto produto : produtos) {
+            valorTotal += produto.getPreco();
         }
         return valorTotal;
     }
-
-    public void exibirItens() {
-        if (itens.isEmpty()) {
-            System.out.println("O carrinho está vazio.");
-        } else {
-            System.out.println("Itens do carrinho:");
-            for (ItemCarrinho item : itens) {
-                System.out.println("- " + item.getDescricao() + ": R$" + item.getPreco());
-            }
-        }
-    }
-
 }
