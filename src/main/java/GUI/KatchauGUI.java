@@ -1,11 +1,13 @@
 package GUI;
 
 import Entities.CarrinhoDeCompras;
+import Entities.ItemCarrinho;
 import Entities.Produto;
 import Util.ArquivoUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KatchauGUI extends JFrame {
@@ -13,11 +15,11 @@ public class KatchauGUI extends JFrame {
     private CarrinhoDeCompras carrinho;
     private JTextArea textAreaDescricao;
     private JComboBox<String> comboBoxFiltro;
-
-    private static final String NOME_ARQUIVO = "dados.produtos";
+    private List<Produto> todosProdutos; // Lista com todos os produtos disponíveis
 
     public KatchauGUI() {
         carrinho = new CarrinhoDeCompras();
+        todosProdutos = new ArrayList<>(); // Inicializa a lista de todos os produtos
 
         // Configurações da janela
         setTitle("Katchau! - Loja de Eletrônicos");
@@ -30,6 +32,7 @@ public class KatchauGUI extends JFrame {
         JButton btnAdicionar = new JButton("Adicionar ao carrinho");
         JButton btnRemover = new JButton("Remover do carrinho");
         JButton btnCalcularTotal = new JButton("Finalizar compra");
+        JButton btnVerCarrinho = new JButton("Ver Carrinho");
         textAreaDescricao = new JTextArea();
         textAreaDescricao.setEditable(false);
 
@@ -38,10 +41,8 @@ public class KatchauGUI extends JFrame {
         comboBoxFiltro.addItem("Todos");
         comboBoxFiltro.addItem("Smartphone");
         comboBoxFiltro.addItem("TV");
-        comboBoxFiltro.addItem("Desktop");
-        comboBoxFiltro.addItem("Tablet");
+        comboBoxFiltro.addItem("Computador");
         comboBoxFiltro.addItem("Console");
-        comboBoxFiltro.addItem("Headset");
         comboBoxFiltro.addItem("Notebook");
 
         // Painéis
@@ -54,15 +55,14 @@ public class KatchauGUI extends JFrame {
         painelSuperior.add(btnRemover, BorderLayout.NORTH);
         painelSuperior.add(comboBoxFiltro, BorderLayout.EAST);
         painelInferior.add(btnCalcularTotal);
+        painelInferior.add(btnVerCarrinho); // Adiciona o botão "Ver Carrinho"
 
         // Adicionando painéis à janela
         add(painelSuperior, BorderLayout.NORTH);
         add(textAreaDescricao, BorderLayout.CENTER);
         add(painelInferior, BorderLayout.SOUTH);
 
-
-
-    // Ação do botão Adicionar Produto
+        // Ação do botão Adicionar Produto
         btnAdicionar.addActionListener(e -> adicionarProduto());
 
         // Ação do botão Remover Produto
@@ -71,21 +71,14 @@ public class KatchauGUI extends JFrame {
         // Ação do botão Calcular Valor Total
         btnCalcularTotal.addActionListener(e -> calcularValorTotal());
 
+        // Ação do botão Ver Carrinho
+        btnVerCarrinho.addActionListener(e -> exibirCarrinho());
+
         // Ação da seleção na JList
         listProdutos.addListSelectionListener(e -> exibirDescricaoProdutoSelecionado());
 
         // Ação da seleção no JComboBox de filtro
         comboBoxFiltro.addActionListener(e -> aplicarFiltro());
-
-        // Carregar os dados ao iniciar a aplicação
-        List<Produto> listaProdutos = ArquivoUtils.carregarDados(NOME_ARQUIVO);
-        if (listaProdutos != null) {
-            DefaultListModel<Produto> model = new DefaultListModel<>();
-            for (Produto produto : listaProdutos) {
-                model.addElement(produto);
-            }
-            listProdutos.setModel(model);
-        }
     }
 
     private void adicionarProduto() {
@@ -95,7 +88,7 @@ public class KatchauGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
 
             // Salvar os dados após adicionar o produto
-            ArquivoUtils.salvarDados(carrinho.getProdutos(), NOME_ARQUIVO);
+            ArquivoUtils.salvarDados(carrinho.getProdutos(), "produtos.txt");
         }
     }
 
@@ -106,13 +99,13 @@ public class KatchauGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Produto removido do carrinho!");
 
             // Salvar os dados após remover o produto
-            ArquivoUtils.salvarDados(carrinho.getProdutos(), NOME_ARQUIVO);
+            ArquivoUtils.salvarDados(carrinho.getProdutos(), "produtos.txt");
         }
     }
 
     private void calcularValorTotal() {
         double valorTotal = carrinho.calcularValorTotal();
-        JOptionPane.showMessageDialog(this, "Valor total da compra: R$" + valorTotal);
+        JOptionPane.showMessageDialog(this, "Valor total da compra: R$" + valorTotal + ", Muito Obrigado por comprar com a Katchau!");
     }
 
     private void exibirDescricaoProdutoSelecionado() {
@@ -129,52 +122,53 @@ public class KatchauGUI extends JFrame {
 
         DefaultListModel<Produto> model = new DefaultListModel<>();
 
-        for (int i = 0; i < listProdutos.getModel().getSize(); i++) {
-            Produto produto = listProdutos.getModel().getElementAt(i);
-            if (produto.getCategoria().equals(filtro) || filtro.equals("Todos")) {
+        if (filtro.equals("Todos")) {
+            for (Produto produto : todosProdutos) {
                 model.addElement(produto);
+            }
+        } else {
+            for (Produto produto : todosProdutos) {
+                if (produto.getCategoria().equals(filtro)) {
+                    model.addElement(produto);
+                }
             }
         }
 
         listProdutos.setModel(model);
     }
 
+    private void exibirCarrinho() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Carrinho de Compras:\n");
+
+        for (ItemCarrinho item : carrinho.getProdutos()) {
+            Produto produto = item.getProduto();
+            double preco = produto.getPreco();
+            sb.append(produto.getNome()).append(" - R$").append(preco).append("\n");
+        }
+
+        sb.append("Total: R$").append(carrinho.calcularValorTotal());
+
+        JOptionPane.showMessageDialog(this, sb.toString(), "Carrinho de Compras", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             KatchauGUI katchauGUI = new KatchauGUI();
 
-            // Adicionar produtos pré-estabelecidos na JList
-            Produto produto1 = new Produto("Smartphone", "Produto 1", 10.0, "Descrição do Produto 1");
-            Produto produto2 = new Produto("TV", "Produto 2", 20.0, "Descrição do Produto 2");
-            Produto produto3 = new Produto("Desktop", "Produto 3", 30.0, "Descrição do Produto 3");
-            Produto produto4 = new Produto("Tablet", "Produto 4", 40.0, "Descrição do Produto 4");
-            Produto produto5 = new Produto("Console", "Produto 5", 50.0, "Descrição do Produto 5");
-            Produto produto6 = new Produto("Headset", "Produto 6", 60.0, "Descrição do Produto 6");
-            Produto produto7 = new Produto("Notebook", "Produto 7", 70.0, "Descrição do Produto 7");
 
-            DefaultListModel<Produto> model = new DefaultListModel<>();
-            model.addElement(produto1);
-            model.addElement(produto2);
-            model.addElement(produto3);
-            model.addElement(produto4);
-            model.addElement(produto5);
-            model.addElement(produto6);
-            model.addElement(produto7);
-
-            katchauGUI.listProdutos.setModel(model);
-
-            // Adicionar opções de filtro ao JComboBox
-            katchauGUI.comboBoxFiltro.addItem("Todos");
-            katchauGUI.comboBoxFiltro.addItem("Smartphone");
-            katchauGUI.comboBoxFiltro.addItem("TV");
-            katchauGUI.comboBoxFiltro.addItem("Desktop");
-            katchauGUI.comboBoxFiltro.addItem("Tablet");
-            katchauGUI.comboBoxFiltro.addItem("Console");
-            katchauGUI.comboBoxFiltro.addItem("Headset");
-            katchauGUI.comboBoxFiltro.addItem("Notebook");
+            // Carregar produtos do arquivo
+            List<Produto> produtos = ArquivoUtils.carregarDados("src/main/resources/produtos.txt");
+            if (produtos != null) {
+                DefaultListModel<Produto> model = new DefaultListModel<>();
+                for (Produto produto : produtos) {
+                    model.addElement(produto);
+                }
+                katchauGUI.listProdutos.setModel(model);
+                katchauGUI.todosProdutos = produtos; // Atribui a lista de todos os produtos
+            }
 
             katchauGUI.setVisible(true);
         });
     }
 }
-

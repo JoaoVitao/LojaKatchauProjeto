@@ -4,4 +4,6 @@ package Entities;
 public interface ItemCarrinho {
     double getPreco();
     String getDescricao();
+
+    Produto getProduto();
 }

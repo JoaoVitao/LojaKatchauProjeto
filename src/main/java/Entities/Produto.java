@@ -1,17 +1,21 @@
 package Entities;
 
 public class Produto implements ItemCarrinho {
+    private String categoria;
     private String nome;
     private double preco;
     private String descricao;
-    private String categoria;
+   ;
 
-    public Produto(String categoria, String nome, double preco, String descricao) {
+    public Produto(String categoria, String nome,double preco, String descricao) {
+        this.categoria = categoria;
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
-        this.categoria = categoria;
+
     }
+
+
 
     // Implementação dos métodos da interface ItemCarrinho
     @Override
@@ -23,6 +27,13 @@ public class Produto implements ItemCarrinho {
     public String getDescricao() {
         return descricao;
     }
+
+
+        @Override
+        public Produto getProduto() {
+            return this;
+        }
+
 
     // Restante da implementação da classe Produto
     public String getNome() {
