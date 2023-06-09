@@ -1,15 +1,12 @@
 package GUI;
-
 import Entities.CarrinhoDeCompras;
 import Entities.ItemCarrinho;
 import Entities.Produto;
 import Util.ArquivoUtils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class KatchauGUI extends JFrame {
     private JList<Produto> listProdutos;
     private CarrinhoDeCompras carrinho;
@@ -85,7 +82,7 @@ public class KatchauGUI extends JFrame {
         Produto produtoSelecionado = listProdutos.getSelectedValue();
         if (produtoSelecionado != null) {
             carrinho.adicionarProduto(produtoSelecionado);
-            JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
+            JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho");
 
             // Salvar os dados após adicionar o produto
             ArquivoUtils.salvarDados(carrinho.getProdutos(), "produtos.txt");

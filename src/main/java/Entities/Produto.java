@@ -1,5 +1,4 @@
 package Entities;
-
 public class Produto implements ItemCarrinho {
     private String categoria;
     private String nome;
@@ -12,7 +11,6 @@ public class Produto implements ItemCarrinho {
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
-
     }
 
 

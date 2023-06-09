@@ -1,8 +1,6 @@
 package Entities;
-
 import java.util.ArrayList;
 import java.util.List;
-
 public class CarrinhoDeCompras {
     private List<ItemCarrinho> itens;
     private List<Produto> produtos;
@@ -11,7 +9,6 @@ public class CarrinhoDeCompras {
         itens = new ArrayList<>();
         produtos = new ArrayList<>();
     }
-
     public void adicionarProduto(ItemCarrinho item) {
         itens.add(item);
         produtos.add(item.getProduto());

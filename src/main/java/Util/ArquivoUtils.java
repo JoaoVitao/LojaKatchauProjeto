@@ -1,11 +1,9 @@
 package Util;
-
 import Entities.Produto;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ArquivoUtils {
 
     public static void salvarDados(List<Produto> produtos, String nomeArquivo) {
