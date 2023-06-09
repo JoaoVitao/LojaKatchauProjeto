@@ -1,18 +1,19 @@
 package Entities;
 
-import javax.swing.*;
-
 public class Produto implements ItemCarrinho {
     private String nome;
     private double preco;
     private String descricao;
+    private String categoria;
 
-    public Produto(String nome, double preco, String descricao) {
+    public Produto(String categoria, String nome, double preco, String descricao) {
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
+        this.categoria = categoria;
     }
 
+    // Implementação dos métodos da interface ItemCarrinho
     @Override
     public double getPreco() {
         return preco;
@@ -23,22 +24,18 @@ public class Produto implements ItemCarrinho {
         return descricao;
     }
 
+    // Restante da implementação da classe Produto
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setPreco(double preco) {
-        this.preco = preco;
+    @Override
+    public String toString() {
+        return nome;
     }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-
 
 }

@@ -1,6 +1,5 @@
 package Entities;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class CarrinhoDeCompras {
         itens.add(item);
     }
 
-    public void removerProduto(ItemCarrinho item) {
+    public void removerProduto(Produto item) {
         itens.remove(item);
     }
 
