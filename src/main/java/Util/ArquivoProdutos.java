@@ -13,12 +13,14 @@ public class ArquivoProdutos {
             String linha;
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";");
-                String categoria = dados[0];
-                String nome = dados[1];
-                double preco = Double.parseDouble(dados[2]);
-                String descricao = dados[3];
-                Produto produto = new Produto(categoria, nome, preco, descricao);
-                produtos.add(produto);
+                if (dados.length >= 4) {
+                    String categoria = dados[0];
+                    String nome = dados[1];
+                    double preco = Double.parseDouble(dados[2]);
+                    String descricao = dados[3];
+                    Produto produto = new Produto(categoria, nome, preco, descricao);
+                    produtos.add(produto);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

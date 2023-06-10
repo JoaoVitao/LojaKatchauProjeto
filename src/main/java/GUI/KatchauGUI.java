@@ -10,21 +10,19 @@ import java.util.stream.Collectors;
 import Util.ArquivoProdutos;
 
 public class KatchauGUI extends JFrame {
-    public JList<String> listProdutos;
+    private JList<String> listProdutos;
     private CarrinhoDeCompras carrinho;
     private JTextArea textAreaDescricao;
     private JComboBox<String> comboBoxFiltro;
     private List<Produto> todosProdutos;
-    private List<String> todosProdutosLista;
-
+    private List<String> produtosExibidos;
 
     public KatchauGUI() {
         carrinho = new CarrinhoDeCompras();
         todosProdutos = ArquivoProdutos.carregarDados("src/main/resources/produtos.txt");
-        todosProdutosLista = todosProdutos.stream()
+        produtosExibidos = todosProdutos.stream()
                 .map(produto -> produto.getNome() + " - R$ " + String.format("%.2f", produto.getPreco()))
                 .collect(Collectors.toList());
-             JPanel painel = new JPanel();
 
         // Configurações da janela
         setTitle("Katchau! - Loja de Eletrônicos");
@@ -34,7 +32,7 @@ public class KatchauGUI extends JFrame {
         setLayout(new BorderLayout());
 
         // Componentes
-        listProdutos = new JList<>();
+        listProdutos = new JList<>(produtosExibidos.toArray(new String[0]));
         JButton btnAdicionar = new JButton("Adicionar ao carrinho");
         JButton btnRemover = new JButton("Remover do carrinho");
         JButton btnCalcularTotal = new JButton("Finalizar compra");
@@ -80,13 +78,17 @@ public class KatchauGUI extends JFrame {
         // Ação do botão Ver Carrinho
         btnVerCarrinho.addActionListener(e -> exibirCarrinho());
 
+        // Ação da seleção do filtro
+        comboBoxFiltro.addActionListener(e -> filtrarProdutos());
 
-        // Selecionar o primeiro item da lista
+        // Selecionar o primeiro produto da lista
         listProdutos.setSelectedIndex(0);
 
+        // Ação da seleção de um produto na lista
+        listProdutos.addListSelectionListener(e -> exibirDescricaoProduto());
 
-        // Adicionar painel ao JFrame
-        add(painel);
+        // Atualizar a descrição do primeiro produto
+        exibirDescricaoProduto();
     }
 
     // Método para adicionar um produto ao carrinho
@@ -143,6 +145,33 @@ public class KatchauGUI extends JFrame {
                     .append(quantidade).append("\n");
         }
         JOptionPane.showMessageDialog(this, carrinhoTexto.toString());
+    }
+
+    // Método para filtrar os produtos exibidos na lista de acordo com o filtro selecionado
+    private void filtrarProdutos() {
+        String filtro = (String) comboBoxFiltro.getSelectedItem();
+        if (filtro.equals("Todos")) {
+            produtosExibidos = todosProdutos.stream()
+                    .map(produto -> produto.getNome() + " - R$ " + String.format("%.2f", produto.getPreco()))
+                    .collect(Collectors.toList());
+        } else {
+            produtosExibidos = todosProdutos.stream()
+                    .filter(produto -> produto.getCategoria().equals(filtro))
+                    .map(produto -> produto.getNome() + " - R$ " + String.format("%.2f", produto.getPreco()))
+                    .collect(Collectors.toList());
+        }
+        listProdutos.setListData(produtosExibidos.toArray(new String[0]));
+    }
+
+    // Método para exibir a descrição do produto selecionado
+    private void exibirDescricaoProduto() {
+        int index = listProdutos.getSelectedIndex();
+        if (index != -1) {
+            Produto produtoSelecionado = todosProdutos.get(index);
+            textAreaDescricao.setText(produtoSelecionado.getDescricao());
+        } else {
+            textAreaDescricao.setText("");
+        }
     }
 
     public static void main(String[] args) {
