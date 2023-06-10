@@ -4,7 +4,7 @@ import Entities.Produto;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-public class ArquivoUtils {
+public class ArquivoProdutos {
 
     public static void salvarDados(List<Produto> produtos, String nomeArquivo) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {

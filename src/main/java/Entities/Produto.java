@@ -4,7 +4,7 @@ public class Produto implements ItemCarrinho {
     private String nome;
     private double preco;
     private String descricao;
-   ;
+
 
 
 

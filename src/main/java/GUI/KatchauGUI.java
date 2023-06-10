@@ -2,7 +2,7 @@ package GUI;
 import Entities.CarrinhoDeCompras;
 import Entities.ItemCarrinho;
 import Entities.Produto;
-import Util.ArquivoUtils;
+import Util.ArquivoProdutos;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -85,20 +85,25 @@ public class KatchauGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho");
 
             // Salvar os dados após adicionar o produto
-            ArquivoUtils.salvarDados(carrinho.getProdutos(), "produtos.txt");
+            ArquivoProdutos.salvarDados(carrinho.getProdutos(), "produtos.txt");
         }
     }
 
     private void removerProduto() {
         Produto produtoSelecionado = listProdutos.getSelectedValue();
         if (produtoSelecionado != null) {
-            carrinho.removerProduto(produtoSelecionado);
-            JOptionPane.showMessageDialog(this, "Produto removido do carrinho!");
+            if (carrinho.getProdutos().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "O carrinho está vazio!");
+            } else {
+                carrinho.removerProduto(produtoSelecionado);
+                JOptionPane.showMessageDialog(this, "Produto removido do carrinho!");
 
-            // Salvar os dados após remover o produto
-            ArquivoUtils.salvarDados(carrinho.getProdutos(), "produtos.txt");
+                // Salvar os dados após remover o produto
+                ArquivoProdutos.salvarDados(carrinho.getProdutos(), "produtos.txt");
+            }
         }
     }
+
 
     private void calcularValorTotal() {
         double valorTotal = carrinho.calcularValorTotal();
@@ -155,7 +160,7 @@ public class KatchauGUI extends JFrame {
 
 
             // Carregar produtos do arquivo
-            List<Produto> produtos = ArquivoUtils.carregarDados("src/main/resources/produtos.txt");
+            List<Produto> produtos = ArquivoProdutos.carregarDados("src/main/resources/produtos.txt");
             if (produtos != null) {
                 DefaultListModel<Produto> model = new DefaultListModel<>();
                 for (Produto produto : produtos) {
