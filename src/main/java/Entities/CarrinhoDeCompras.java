@@ -14,6 +14,8 @@ public class CarrinhoDeCompras {
         produtos.add(item.getProduto());
     }
 
+
+
     public void removerProduto(Produto item) {
         itens.removeIf(i -> i.getProduto().equals(item));
         produtos.remove(item);

@@ -21,6 +21,8 @@ public class ArquivoUtils {
     public static List<Produto> carregarDados(String nomeArquivo) {
         List<Produto> produtos = new ArrayList<>();
 
+
+
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
             while ((linha = reader.readLine()) != null) {

@@ -28,8 +28,8 @@ public class KatchauGUI extends JFrame {
         listProdutos = new JList<>();
         JButton btnAdicionar = new JButton("Adicionar ao carrinho");
         JButton btnRemover = new JButton("Remover do carrinho");
-        JButton btnCalcularTotal = new JButton("Finalizar compra");
-        JButton btnVerCarrinho = new JButton("Ver Carrinho");
+        JButton btnCalcularTotal = new JButton("Finalizar a compra");
+        JButton btnVerCarrinho = new JButton("Ver o Carrinho");
         textAreaDescricao = new JTextArea();
         textAreaDescricao.setEditable(false);
 
