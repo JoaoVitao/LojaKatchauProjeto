@@ -13,13 +13,12 @@ public class KatchauGUI extends JFrame {
     private JTextArea textAreaDescricao;
     private JComboBox<String> comboBoxFiltro;
     private List<Produto> todosProdutos; // Lista com todos os produtos disponíveis
-
     public KatchauGUI() {
         carrinho = new CarrinhoDeCompras();
         todosProdutos = new ArrayList<>(); // Inicializa a lista de todos os produtos
 
         // Configurações da janela
-        setTitle("Katchau! - Loja de Eletrônicos");
+        setTitle("Katchau! - Loja de Eletrônicos ");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
         setLayout(new BorderLayout());

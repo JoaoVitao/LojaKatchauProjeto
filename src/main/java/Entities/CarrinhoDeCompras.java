@@ -28,7 +28,6 @@ public class CarrinhoDeCompras {
         }
         return valorTotal;
     }
-
     public void exibirItens() {
         if (itens.isEmpty()) {
             System.out.println("O carrinho está vazio.");
