@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 import Util.ArquivoProdutos;
 
 public class KatchauGUI extends JFrame {
-    private JList<String> listProdutos;
+    public JList<String> listProdutos;
     private CarrinhoDeCompras carrinho;
     private JTextArea textAreaDescricao;
     private JComboBox<String> comboBoxFiltro;
-    private List<Produto> todosProdutos;
-    private List<String> produtosExibidos;
+    public List<Produto> todosProdutos;
+    public List<String> produtosExibidos;
 
     public KatchauGUI() {
         carrinho = new CarrinhoDeCompras();
@@ -92,7 +92,7 @@ public class KatchauGUI extends JFrame {
     }
 
     // Método para adicionar um produto ao carrinho
-    private void adicionarProdutoAoCarrinho() {
+    public void adicionarProdutoAoCarrinho() {
         int index = listProdutos.getSelectedIndex();
         if (index != -1) {
             Produto produtoSelecionado = todosProdutos.get(index);
@@ -138,12 +138,19 @@ public class KatchauGUI extends JFrame {
     private void exibirCarrinho() {
         Map<Produto, Integer> itensCarrinho = carrinho.getCarrinho();
         StringBuilder carrinhoTexto = new StringBuilder("Carrinho de Compras:\n\n");
+        double valorTotal = 0.0;
+
         for (Map.Entry<Produto, Integer> entry : itensCarrinho.entrySet()) {
             Produto produto = entry.getKey();
             int quantidade = entry.getValue();
+            double subtotal = produto.getPreco() * quantidade;
+            valorTotal += subtotal;
             carrinhoTexto.append(produto.getNome()).append(" - R$ ").append(String.format("%.2f", produto.getPreco())).append(" x ")
-                    .append(quantidade).append("\n");
+                    .append(quantidade).append(" = R$ ").append(String.format("%.2f", subtotal)).append("\n");
         }
+
+        carrinhoTexto.append("\nValor total: R$ ").append(String.format("%.2f", valorTotal));
+
         JOptionPane.showMessageDialog(this, carrinhoTexto.toString());
     }
 
