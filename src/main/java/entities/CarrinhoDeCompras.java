@@ -3,7 +3,7 @@ package entities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CarrinhoDeCompras {
+public class CarrinhoDeCompras  {
     private Map<Produto, Integer> carrinho;
 
     public CarrinhoDeCompras() {

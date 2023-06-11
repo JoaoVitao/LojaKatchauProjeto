@@ -104,16 +104,19 @@ public class KatchauGUI extends JFrame {
     }
 
     // Método para remover um produto do carrinho
+    // Método para remover um produto do carrinho
     private void removerProdutoDoCarrinho() {
         int index = listProdutos.getSelectedIndex();
         if (index != -1) {
             Produto produtoSelecionado = todosProdutos.get(index);
             carrinho.removerProduto(produtoSelecionado);
+            carrinho.getCarrinho().remove(produtoSelecionado);
             JOptionPane.showMessageDialog(this, "Produto removido do carrinho com sucesso!");
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um produto da lista para remover do carrinho!");
         }
     }
+
 
     // Método para calcular o valor total da compra
     private void calcularValorTotal() {
